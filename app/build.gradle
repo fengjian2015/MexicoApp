@@ -1,0 +1,82 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.fly.mexicoapp"
+        minSdk 23
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        signingConfig {
+            keyAlias 'mexico'
+            keyPassword 'aassdd123'
+            storeFile file('mexico.jks')
+            storePassword 'aassdd123'
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signingConfig
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signingConfig
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.0"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    implementation 'com.appsflyer:af-android-sdk:6.3.2'
+    implementation "com.android.installreferrer:installreferrer:2.2"
+    
+    implementation 'com.flurry.android:analytics:13.1.0'
+    // Retrofit
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api 'com.squareup.okhttp3:okhttp:3.12.13'
+    api 'com.google.code.gson:gson:2.9.0'
+    // 权限请求框架：https://github.com/getActivity/XXPermissions
+    api 'com.github.getActivity:XXPermissions:15.0'
+    implementation 'com.blankj:utilcodex:1.31.0'
+    //goole获取gaid
+    implementation group: 'com.google.android.gms', name: 'play-services-ads', version: '20.2.0'
+    // For Kotlin
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+}

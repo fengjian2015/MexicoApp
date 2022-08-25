@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MexicoApp</string>
+
+    <string name="http_network_error">Excepción del servidor</string>
+
+    <string name="update_error">Tiempo de espera de la sesión.</string>
+    <string name="update_update_now">actualizar</string>
+    <string name="update_update_ignorar">ignorar</string>
+    <string name="update_update_instalar">Instalar ahora</string>
+
+    <string name="webview_ssl_hint">SSL certificate validation failed</string>
+    <string name="webview_ssl_go">Go on</string>
+    <string name="webview_ssl_cancel">Cancel</string>
+</resources>

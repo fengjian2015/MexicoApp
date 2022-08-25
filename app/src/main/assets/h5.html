@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JS交互demo</title>
+    <style type="text/css">
+            button{
+                width:100px;
+                height: 60px;
+            }
+        </style>
+    <script>
+        //***************以下代码Android调用JS代码*********************
+        function CallJS(msg){
+           alert("回调成功"+msg);
+           console.log('----------调用js方法'+msg);
+        }
+
+        //***************以下代码JS调用Android代码*********************
+
+         function invokeSelectContact(){
+            var s='{"id":"1574215326410","event":"eventSelectContact","data":{}}';
+             console.log('选择通讯录'+s);
+            appAndroid.appJS(s);
+         }
+
+         function invokeCallPhone(){
+            var s='{"id":"1574215326410","event":"eventCallPhone","data":{"value":"154555645454"}}';
+             console.log('拨打电话'+s);
+            appAndroid.appJS(s);
+         }
+
+          function invokeAppsFlyer(){
+            var s='{"id":"1574215326410","event":"eventAppsFlyer","data":{"value":"cacpersonal_photo"}}';
+             console.log('埋点数据'+s);
+            appAndroid.appJS(s);
+         }
+
+           function forwardOutside(){
+            var s='{"id":"1574215326410","event":"eventNewView","data":{"value":"www.baidu.com"}}';
+             console.log('跳转新的页面'+s);
+            appAndroid.appJS(s);
+         }
+
+
+         function appInvoke(){
+            var s='{"id":"1574215326410","event":"eventCopy","data":{"value":"内容内容"}}';
+             console.log('复制'+s);
+            appAndroid.appJS(s);
+         }
+
+        function getUserInfo(){
+            var s='{"id":"1574215326410","event":"eventUserInfo","data":{}}';
+             console.log('用户信息'+s);
+            appAndroid.appJS(s);
+         }
+
+          function signOut(){
+            var s='{"id":"1574215326410","event":"eventSignOut","data":{}}';
+             console.log('用户信息登出'+s);
+            appAndroid.appJS(s);
+         }
+
+          function invokeContact(){
+            var s='{"id":"1574215326410","event":"eventContactInfo","data":{}}';
+             console.log('通讯录'+s);
+            appAndroid.appJS(s);
+         }
+
+
+          function invokeDeviceInfo(){
+            var s='{"id":"1574215326410","event":"evenDeviceInfo","data":{}}';
+             console.log('设备信息'+s);
+            appAndroid.appJS(s);
+         }
+
+         function invokeLocationInfo(){
+            var s='{"id":"1574215326410","event":"eventLocationInfo","data":{}}';
+            console.log('位置信息'+s);
+            appAndroid.appJS(s);
+         }
+
+           function invokeInstallationInfo(){
+            var s='{"id":"1574215326410","event":"eventInstallationInfo","data":{}}';
+             console.log('安装信息'+s);
+            appAndroid.appJS(s);
+         }
+
+         function invokeSmsInfo(){
+            var s='{"id":"1574215326410","event":"eventSmsInfo","data":{}}';
+             console.log('短信信息'+s);
+            appAndroid.appJS(s);
+         }
+
+          function invokeTackPhoto(){
+            var s='{"id":"1574215326410","event":"eventTackPhoto","data":{"value":"1"}}';
+             console.log('拍照上传'+s);
+            appAndroid.appJS(s);
+         }
+
+         function invokeAlbumInfo(){
+            var s='{"id":"1574215326410","event":"eventAlbumInfo","data":{}}';
+             console.log('相册信息'+s);
+            appAndroid.appJS(s);
+         }
+
+      function invokeCalendersInfo(){
+            var s='{"id":"1574215326410","event":"eventCalendersInfo","data":{}}';
+             console.log('日历信息'+s);
+            appAndroid.appJS(s);
+         }
+
+    </script>
+</head>
+<body>
+<button type="button" id="button11" onclick="invokeSelectContact()">选择通讯录信息</button>
+<button type="button" id="button12" onclick="invokeCallPhone()">拨打电话</button>
+<button type="button" id="button13" onclick="invokeAppsFlyer()">埋点数据</button>
+<button type="button" id="button15" onclick="forwardOutside()">跳转新的页面</button>
+
+<button type="button" id="button1" onclick="appInvoke()">Android复制到剪切板</button>
+<button type="button" id="button2" onclick="getUserInfo()">获取用户信息</button>
+<button type="button" id="button3" onclick="signOut()">退出登录</button>
+<button type="button" id="button5" onclick="invokeContact()">通讯录信息收集</button>
+<button type="button" id="button6" onclick="invokeDeviceInfo()">设备信息收集</button>
+<button type="button" id="button8" onclick="invokeLocationInfo()">位置信息收集</button>
+<button type="button" id="button7" onclick="invokeInstallationInfo()">安装信息收集</button>
+<button type="button" id="button9" onclick="invokeSmsInfo()">短信信息收集</button>
+<button type="button" id="button14" onclick="invokeTackPhoto()">拍照上传</button>
+<button type="button" id="button10" onclick="invokeAlbumInfo()">相册信息收集</button>
+<button type="button" id="button16" onclick="invokeCalendersInfo()">日历信息收集</button>
+
+</body>
+</html>
