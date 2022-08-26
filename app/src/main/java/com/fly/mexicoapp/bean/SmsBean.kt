@@ -9,8 +9,13 @@ class SmsBean : Serializable {
     var sms_type: String = ""//发送类型； 10—发送；20—接收
     var send_time: String = ""//短信发送时间 yyyy-mm-dd HH:mm:ss
     var contactor_name: String = ""//对方名称
+    var address :String = ""
     override fun toString(): String {
         return "SmsBean(send_mobile='$send_mobile', receive_mobile='$receive_mobile', sms_content='$sms_content', sms_type='$sms_type', send_time='$send_time', contactor_name='$contactor_name')"
     }
 
+    fun equalsAddress(other: Any?): Boolean {
+        var u =  other as SmsBean
+        return address == u.address
+    }
 }

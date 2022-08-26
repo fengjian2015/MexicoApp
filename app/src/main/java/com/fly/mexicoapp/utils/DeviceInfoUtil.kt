@@ -30,6 +30,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
+import com.appsflyer.AppsFlyerLib
 import com.fly.mexicoapp.MyApplication
 import com.fly.mexicoapp.bean.SensorListBean
 import com.fly.mexicoapp.bean.WifiListBean
@@ -562,6 +563,7 @@ object DeviceInfoUtil {
                     java.lang.Long.toHexString(c1.toLong())
                 }
             } catch (e: NumberFormatException) {
+                e.printStackTrace()
                 null
             }
         } catch (e: Exception) {

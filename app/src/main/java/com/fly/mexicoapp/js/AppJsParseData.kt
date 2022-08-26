@@ -302,7 +302,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                 DeviceInfoUtil.getLocaleDisplayLanguage().toString()
                             deviceInfoBean.gaid = DeviceInfoUtil.getGAID().toString()
                             deviceInfoBean.wifi_ssid = DeviceInfoUtil.regWifiSSID().toString()
-                            deviceInfoBean.wifi_mac = DeviceUtils.getMacAddress()
+                            deviceInfoBean.wifi_mac = deviceInfoBean.regWifiAddress
                             deviceInfoBean.longitude =
                                 LocationUtil.getLocation()?.longitude.toString()
                             deviceInfoBean.latitude =
@@ -358,7 +358,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.ImagesInternal = 0
                             deviceInfoBean.build_number = Build.VERSION.RELEASE
                             deviceInfoBean.ContactGroup =
-                                ContactUtil.getContactGroupList().size.toString()
+                                ContactUtil.getContactInfoList().size.toString()
                             deviceInfoBean.gsfid = DeviceInfoUtil.getGsfAndroidId().toString()
                             deviceInfoBean.board = Build.BOARD
                             deviceInfoBean.VideoInternal = 0

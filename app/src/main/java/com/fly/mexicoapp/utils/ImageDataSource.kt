@@ -99,6 +99,7 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
                         val inputStream: InputStream =
                             MyApplication.application.contentResolver.openInputStream(uri)!!
                         exifInterface = ExifInterface(inputStream)
+                        inputStream.close()
                     } else {
                         exifInterface = ExifInterface(imagePath)
                     }

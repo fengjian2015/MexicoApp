@@ -15,12 +15,15 @@ import com.fly.mexicoapp.MyApplication
 import com.fly.mexicoapp.bean.SimInfoBean
 import com.fly.mexicoapp.bean.SmsBean
 import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors
+import java.util.stream.Collectors.toList
 
 object SmsUtil {
-    private var simMultiInfo: List<SimInfoBean>? = null
-
     fun getSmsList(): ArrayList<SmsBean> {
         var smsBeans = ArrayList<SmsBean>()
+        var old = System.currentTimeMillis()
+        LogUtils.d("-----------开始")
         try {
             val time = System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000
             val cur = MyApplication.application.contentResolver.query(
@@ -40,6 +43,7 @@ object SmsUtil {
                     var body = cur.getString(3)
                     var subscriptionId = cur.getInt(4)
                     var smsBean = SmsBean()
+                    smsBean.address = address
                     smsBean.send_mobile = if (type ==1){
                         address
                     }else{
@@ -57,12 +61,46 @@ object SmsUtil {
                         "10"
                     }
                     smsBean.send_time = DateTool.getTimeFromLong(DateTool.FMT_DATE_TIME,date).toString()
-                    smsBean.contactor_name = getContactName(address).toString()
                     smsBeans.add(smsBean)
                 }
+                cur.close()
+                getContactName(smsBeans)
             }
         }catch (e:Exception){
             e.printStackTrace()
+        }
+        var now = System.currentTimeMillis()
+        LogUtils.d("-----------结束${now - old}")
+        return smsBeans
+    }
+
+    private fun getContactName(smsBeans:ArrayList<SmsBean>){
+        try {
+            var contactInfoList =ContactUtil.getContactInfoList()
+            for (smsBean in smsBeans){
+                for (contacts1 in contactInfoList){
+                    if (smsBean.address == contacts1.mobile){
+                        smsBean.contactor_name = contacts1.name
+                        continue
+                    }
+                }
+                if (TextUtils.isEmpty(smsBean.contactor_name)){
+                    smsBean.contactor_name = smsBean.address
+                }
+            }
+        }catch (e:java.lang.Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun repetition(smsBeans:ArrayList<SmsBean> ,smsBeans1:ArrayList<SmsBean>):ArrayList<SmsBean>{
+        for (smsBean in smsBeans){
+            for (smsBean1 in smsBeans1){
+                if (smsBean.equalsAddress(smsBean1)) {
+                    smsBean.contactor_name = smsBean1.contactor_name
+                    continue
+                }
+            }
         }
         return smsBeans
     }
@@ -87,78 +125,6 @@ object SmsUtil {
         return phoneNumber
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getNumber(subId: Int): String? {
-        if (!isSimCardReady()) {
-            return "无sim卡"
-        }
-        val tm = MyApplication.application.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        var phone = tm.line1Number
-        if (subId != -1) {
-            if (simMultiInfo == null) {
-                simMultiInfo =getSimMultiInfo()
-            }
-            if (simMultiInfo != null) {
-                for (simInfo in simMultiInfo!!) {
-                    if (subId == simInfo.mSimSlotIndex && !TextUtils.isEmpty(simInfo.mNumber)) {
-                        phone = simInfo.mNumber as String?
-                    }
-                }
-            }
-        }
-        return phone
-    }
-
-    /**
-     * 判断sim卡是否准备好
-     *
-     * @return `true`: 是<br></br>`false`: 否
-     */
-    fun isSimCardReady(): Boolean {
-        val tm = MyApplication.application.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        return tm != null && tm.simState == TelephonyManager.SIM_STATE_READY
-    }
-
-    /**
-     * 获取多卡信息
-     *
-     * @return 多Sim卡的具体信息
-     */
-    @SuppressLint("MissingPermission")
-    fun getSimMultiInfo(): List<SimInfoBean>? {
-        val infos: MutableList<SimInfoBean> =
-            ArrayList<SimInfoBean>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            //1.版本超过5.1，调用系统方法
-            val mSubscriptionManager = MyApplication.application
-                .getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-            var activeSubscriptionInfoList: List<SubscriptionInfo>? = null
-            if (mSubscriptionManager != null) {
-                try {
-                    activeSubscriptionInfoList = mSubscriptionManager.activeSubscriptionInfoList
-                } catch (ignored: Exception) {
-                }
-            }
-            if (activeSubscriptionInfoList != null && activeSubscriptionInfoList.isNotEmpty()) {
-                //1.1.1 有使用的卡，就遍历所有卡
-                for (subscriptionInfo in activeSubscriptionInfoList) {
-                    val simInfo= SimInfoBean()
-                    simInfo.mCarrierName = subscriptionInfo.carrierName
-                    simInfo.mIccId = subscriptionInfo.iccId
-                    simInfo.mSimSlotIndex = subscriptionInfo.simSlotIndex
-                    simInfo.mNumber = subscriptionInfo.number
-                    simInfo.mCountryIso = subscriptionInfo.countryIso
-                    simInfo.mSubscriptionId = subscriptionInfo.subscriptionId
-                    infos.add(simInfo)
-                }
-            }
-        }
-        //3.通过反射读取卡槽信息，最后通过IMEI去重
-        for (i in 0 until getSimCount()) {
-            getReflexSimInfo(i)?.let { infos.add(it) }
-        }
-        return infos
-    }
 
     /**
      * 获取IMEI码
