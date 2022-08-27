@@ -23,6 +23,7 @@ class AlbumInfoBean:Serializable {
     var focal_length :String ="" //镜头焦距
     var flash :String ="" //闪光灯状态
     var software :String ="" //软件
+    var id:Long=0;//图片存储id
     override fun toString(): String {
         return "AlbumInfoBean(name='$name', author='$author', height='$height', width='$width', longitude='$longitude', latitude='$latitude', model='$model', addTime='$addTime', updateTime='$updateTime', save_time='$save_time', orientation='$orientation', x_resolution='$x_resolution', y_resolution='$y_resolution', gps_altitude='$gps_altitude', gps_processing_method='$gps_processing_method', lens_make='$lens_make', lens_model='$lens_model', focal_length='$focal_length', flash='$flash', software='$software')"
     }

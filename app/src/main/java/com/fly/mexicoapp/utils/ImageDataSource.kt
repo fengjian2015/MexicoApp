@@ -1,12 +1,15 @@
 package com.fly.mexicoapp.utils
 
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.database.Cursor
 import android.media.ExifInterface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.webkit.MimeTypeMap
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
@@ -17,6 +20,9 @@ import com.fly.mexicoapp.utils.DateTool.FMT_DATE_TIME2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 
 
@@ -85,28 +91,34 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
                 val imagePath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]))
                 val imageWidth = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]))
                 val imageHeight = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[4]))
+                val mimeType = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]))
                 val imageAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]))
 
                 var exifInterface: ExifInterface? = null
                 val latLong = FloatArray(2)
-                try {
-                    //兼容分区存储问题
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val id: Long = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[7]))
-                        //通过id构造Uri
-                        val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-                        //构造输入流
-                        val inputStream: InputStream =
-                            MyApplication.application.contentResolver.openInputStream(uri)!!
-                        exifInterface = ExifInterface(inputStream)
-                        inputStream.close()
-                    } else {
-                        exifInterface = ExifInterface(imagePath)
+                if (mimeType!=null && mimeType.toLowerCase().contains("jpeg")  || mimeType.toLowerCase().contains("jpg"))
+                {
+                    try {
+                        //兼容分区存储问题
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                        val uri = Uri.fromFile(File(imagePath))
+                            val id: Long = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[7]))
+                            //通过id构造Uri
+                            val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+//                            //构造输入流
+                            val inputStream: InputStream =
+                                MyApplication.application.contentResolver.openInputStream(uri)!!
+//                            exifInterface = ExifInterface(inputStream)
+                            inputStream.close()
+                        } else {
+                            exifInterface = ExifInterface(imagePath)
+                        }
+                        exifInterface?.getLatLong(latLong)
+                    } catch (e: Exception) {
                     }
-                    exifInterface.getLatLong(latLong)
-                } catch (e: Exception) {
                 }
                 var albumInfo = AlbumInfoBean()
+                albumInfo.id = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[7]))
                 albumInfo.name = imageName
                 albumInfo.author =
                     if (TextUtils.isEmpty(exifInterface?.getAttribute(ExifInterface.TAG_MAKE))) {
@@ -164,6 +176,32 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
                 on.onImageLoad(albumInfos)
             }
         }
+    }
+
+    private fun addExifInterface29(){
+//        for (albumInfo in albumInfos){
+//            var exifInterface: ExifInterface? = null
+//            val latLong = FloatArray(2)
+//            try {
+//                //兼容分区存储问题
+//                var albums: ArrayList<AlbumInfoBean> = ArrayList()
+//                var mContentResolver = MyApplication.application.contentResolver
+//                var c = mContentResolver.query(
+//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null)
+//                if (c!=null){
+//                    while (c.moveToNext()) {
+//
+//                    }
+//                }
+//                //构造输入流
+//                val inputStream: InputStream =
+//                    MyApplication.application.contentResolver.openInputStream(uri)!!
+//                exifInterface = ExifInterface(inputStream)
+//                inputStream.close()
+//                exifInterface.getLatLong(latLong)
+//            } catch (e: Exception) {
+//            }
+//        }
     }
 
 

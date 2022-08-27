@@ -563,7 +563,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                 imageDataSource.unOnImageLoadListener()
                                 GlobalScope.launch(Dispatchers.IO) {
                                     var albumInfoBeans = imageFolders
-                                    LogUtils.d("相册信息：${albumInfoBeans}")
+                                    LogUtils.d("相册信息：${albumInfoBeans.size}+${albumInfoBeans}")
                                     withContext(Dispatchers.Main) {
                                         var applyInfoBean= ApplyInfoBean()
                                         applyInfoBean.album_info = albumInfoBeans
