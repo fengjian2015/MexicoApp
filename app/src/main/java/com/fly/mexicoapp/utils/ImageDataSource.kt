@@ -43,7 +43,7 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
     private var isLoadFinish = false
     private var albumInfos: ArrayList<AlbumInfoBean> = ArrayList()
     lateinit var activity: FragmentActivity
-    var time = System.currentTimeMillis() / 1000 - 365 * 24 * 60 * 60
+    var time = DateTool.getServerTimestamp() / 1000 - 365 * 24 * 60 * 60
 
     fun load(activity: FragmentActivity) {
         this.activity = activity

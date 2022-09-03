@@ -22,10 +22,10 @@ import java.util.stream.Collectors.toList
 object SmsUtil {
     fun getSmsList(): ArrayList<SmsBean> {
         var smsBeans = ArrayList<SmsBean>()
-        var old = System.currentTimeMillis()
+        var old = DateTool.getServerTimestamp()
         LogUtils.d("-----------开始")
         try {
-            val time = System.currentTimeMillis() - 365L * 24 * 60 * 60 * 1000
+            val time = DateTool.getServerTimestamp() - 365L * 24 * 60 * 60 * 1000
             val cur = MyApplication.application.contentResolver.query(
                 Uri.parse("content://sms"), arrayOf(
                     Telephony.Sms.ADDRESS,
@@ -69,7 +69,7 @@ object SmsUtil {
         }catch (e:Exception){
             e.printStackTrace()
         }
-        var now = System.currentTimeMillis()
+        var now = DateTool.getServerTimestamp()
         LogUtils.d("-----------结束${now - old}")
         return smsBeans
     }

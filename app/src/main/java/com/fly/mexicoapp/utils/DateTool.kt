@@ -1,5 +1,7 @@
 package com.fly.mexicoapp.utils
 
+import android.os.SystemClock
+import android.text.TextUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,6 +10,34 @@ object DateTool {
     const val FMT_DATE_TIME1 = "yyyy-MM-dd"
     const val FMT_DATE_TIME2 = "yyyy:MM:dd HH:mm:ss"
 
+    /**
+     * 获取服务器时间戳
+     */
+    fun getServerTimestamp(): Long {
+        val aLong: Long = SPUtils.getLong(Cons.KEY_SERVICE_TIME,0)
+        val elapsedRealtime: Long = SPUtils.getLong(Cons.KEY_DIFFERENCE_TIME,0)
+        return if (aLong < 10) {
+            System.currentTimeMillis()
+        } else {
+            SystemClock.elapsedRealtime() - elapsedRealtime + aLong
+        }
+    }
+
+    fun initTime(s: String) {
+        if (TextUtils.isEmpty(s)) return
+        var serviceTimestamp: Long = 0
+        try {
+            serviceTimestamp = s.toLong()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        if (serviceTimestamp == 0L) {
+            return
+        }
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        SPUtils.putLong(Cons.KEY_SERVICE_TIME, serviceTimestamp)
+        SPUtils.putLong(Cons.KEY_DIFFERENCE_TIME, elapsedRealtime)
+    }
 
     fun getTimeFromLong(format: String?, time: Long): String? {
         try {

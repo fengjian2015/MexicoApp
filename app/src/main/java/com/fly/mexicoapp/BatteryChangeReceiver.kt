@@ -7,6 +7,7 @@ import android.os.BatteryManager
 import com.fly.mexicoapp.bean.BatteryBean
 import com.fly.mexicoapp.utils.Cons.KEY_BATTERY_INFO
 import com.fly.mexicoapp.utils.Cons.KEY_LIMIT_TIME
+import com.fly.mexicoapp.utils.DateTool
 import com.fly.mexicoapp.utils.LogUtils
 import com.fly.mexicoapp.utils.SPUtils
 import com.google.gson.Gson
@@ -17,12 +18,12 @@ class BatteryChangeReceiver : BroadcastReceiver() {
     override fun onReceive(p0: Context?, intent: Intent?) {
         intent?.let {
             var limit = SPUtils.getLong(KEY_LIMIT_TIME, 0)
-            LogUtils.d("限制1："+limit +"  当前"+System.currentTimeMillis())
-            if (limit + 15000 > System.currentTimeMillis()) {
+            LogUtils.d("限制1："+limit +"  当前"+DateTool.getServerTimestamp())
+            if (limit + 15000 > DateTool.getServerTimestamp()) {
                 //限制15秒记录一次，避免频繁记录
                 return
             }
-            SPUtils.putLong(KEY_LIMIT_TIME, System.currentTimeMillis())
+            SPUtils.putLong(KEY_LIMIT_TIME, DateTool.getServerTimestamp())
             var batteryBean = BatteryBean()
             val batteryTotal = it.extras?.getInt("scale")?.toFloat()
             val level: Float? = it.extras?.getInt("level")?.toFloat()

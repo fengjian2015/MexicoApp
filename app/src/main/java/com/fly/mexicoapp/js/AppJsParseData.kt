@@ -9,6 +9,7 @@ import android.os.BatteryManager
 import android.os.Build
 import android.os.SystemClock
 import android.provider.ContactsContract
+import android.text.TextUtils
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +34,7 @@ import com.fly.mexicoapp.utils.Cons.JS_KEY_LOCATION_INFO
 import com.fly.mexicoapp.utils.Cons.JS_KEY_LOGOUT
 import com.fly.mexicoapp.utils.Cons.JS_KEY_NEW_VIEW
 import com.fly.mexicoapp.utils.Cons.JS_KEY_SELECT_CONTACT
+import com.fly.mexicoapp.utils.Cons.JS_KEY_SERVICE_TIME
 import com.fly.mexicoapp.utils.Cons.JS_KEY_SMS_INFO
 import com.fly.mexicoapp.utils.Cons.JS_KEY_TACK_PHOTO
 import com.fly.mexicoapp.utils.Cons.JS_KEY_USER_INFO
@@ -78,6 +80,18 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
             JS_KEY_CALL_PHONE -> eventCallPhone(id,data)
             JS_KEY_APPS_FLYER -> eventAppsFlyer(id,data)
             JS_KEY_NEW_VIEW -> eventNewView(id,data)
+            JS_KEY_SERVICE_TIME -> eventServiceTime(id,data)
+        }
+    }
+
+    private fun eventServiceTime(id: String, data: Any?){
+        try {
+            var commentParseDataBean = Gson().fromJson(data.toString(), CommentParseDataBean::class.java)
+            val time: String = commentParseDataBean.value
+            DateTool.initTime(time)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CallBackJS.callbackJsErrorOther(mWebView, id, JS_KEY_SERVICE_TIME, "Los parámetros son incorrectos.")
         }
     }
 
@@ -275,7 +289,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.ip = DeviceInfoUtil.getIPAddress().toString()
                             deviceInfoBean.deviceCreateTime = DateTool.getTimeFromLong(
                                 DateTool.FMT_DATE_TIME,
-                                System.currentTimeMillis()
+                                DateTool.getServerTimestamp()
                             ).toString()
                             deviceInfoBean.battery_temper =
                                 CommonUtil.stringToInt(batteryBean.temperature)
@@ -420,7 +434,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             var location = LocationUtil.getLocation()
                             locationBean.geo_time = DateTool.getTimeFromLong(
                                 DateTool.FMT_DATE_TIME,
-                                System.currentTimeMillis()
+                                DateTool.getServerTimestamp()
                             ).toString()
                             if (location != null) {
                                 locationBean.latitude = location.latitude.toString()
@@ -431,7 +445,11 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                     locationBean.location = address.featureName
                                     locationBean.gps_address_province = address.adminArea
                                     locationBean.gps_address_city = address.locality
-                                    locationBean.gps_address_street = address.subAdminArea
+                                    if(TextUtils.isEmpty(address.thoroughfare)) {
+                                        locationBean.gps_address_street = address.featureName
+                                    }else{
+                                        locationBean.gps_address_street = address.thoroughfare
+                                    }
                                 }
                             }
                             withContext(Dispatchers.Main) {

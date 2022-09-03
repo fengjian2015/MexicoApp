@@ -115,7 +115,7 @@ object CommonUtil {
     }
 
     fun tackPhoto():File?{
-        var photoFile = File(getImageDir(),  System.currentTimeMillis().toString() + ".jpg")
+        var photoFile = File(getImageDir(),  DateTool.getServerTimestamp().toString() + ".jpg")
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         var mImageUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //兼容7.0以上

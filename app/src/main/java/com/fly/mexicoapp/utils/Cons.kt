@@ -14,6 +14,8 @@ object Cons {
     val KEY_PUBLIC_IP="PublicIP"
     val KEY_LIMIT_TIME="LimitTime"
     val KEY_AF_CHANNEL ="KEY_AF_CHANNEL"
+    val KEY_SERVICE_TIME ="keyServicesTimes"
+    val KEY_DIFFERENCE_TIME ="keyDifTimes"
 
     val KEY_PROTOCAL_1 ="PROTOCAL_1"
     val KEY_PROTOCAL_2 ="PROTOCAL_2"
@@ -39,4 +41,5 @@ object Cons {
     val JS_KEY_CALL_PHONE="eventCallPhone"
     val JS_KEY_APPS_FLYER="eventAppsFlyer"
     val JS_KEY_NEW_VIEW="eventNewView"
+    val JS_KEY_SERVICE_TIME="eventServiceTime"
 }
