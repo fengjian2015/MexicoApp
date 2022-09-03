@@ -298,9 +298,14 @@ object DeviceInfoUtil {
         return Locale.getDefault().toString();
     }
 
+    fun getLocaleIos3Language(): String? {
+        val locale: Locale = MyApplication.application.resources.configuration.locale
+        return locale.isO3Language
+    }
+
     fun getLocaleIos3Country(): String? {
         val locale: Locale = MyApplication.application.resources.configuration.locale
-        return locale.language
+        return locale.isO3Country
     }
 
     //获取 GAID

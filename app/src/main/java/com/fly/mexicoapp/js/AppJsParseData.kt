@@ -258,7 +258,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.imei = DeviceInfoUtil.getIMEI()
                             deviceInfoBean.imsi = DeviceInfoUtil.getAndroidID().toString()
                             deviceInfoBean.phoneModel = Build.MODEL
-                            deviceInfoBean.phoneVersion = Build.VERSION.RELEASE
+                            deviceInfoBean.phoneVersion = Build.VERSION.SDK_INT.toString()
                             deviceInfoBean.macAddress = DeviceUtils.getMacAddress()
                             deviceInfoBean.availableSpace = DeviceInfoUtil.getAvailableSpace()
                             deviceInfoBean.sensorCount = DeviceInfoUtil.getSensorCount()
@@ -299,7 +299,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.locale_ios3_country =
                                 DeviceInfoUtil.getLocaleIos3Country().toString()
                             deviceInfoBean.locale_display_language =
-                                DeviceInfoUtil.getLocaleDisplayLanguage().toString()
+                                DeviceInfoUtil.getLocaleIos3Language().toString()
                             deviceInfoBean.gaid = DeviceInfoUtil.getGAID().toString()
                             deviceInfoBean.wifi_ssid = DeviceInfoUtil.regWifiSSID().toString()
                             deviceInfoBean.wifi_mac = deviceInfoBean.regWifiAddress
@@ -348,21 +348,21 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                 } else {
                                     0
                                 }
-                            deviceInfoBean.AudioInternal = 0
+                            deviceInfoBean.AudioInternal = FileUtil.getAudioInternal().size
                             deviceInfoBean.nettype =
-                                NetUtils.getNetworkState(MyApplication.application).toString()
+                                NetUtils.getNetworkState1(MyApplication.application).toString()
                             deviceInfoBean.iccid1 = DeviceInfoUtil.getICCID1().toString()
                             deviceInfoBean.serial = Build.SERIAL
                             deviceInfoBean.kernel_architecture = Build.CPU_ABI
                             deviceInfoBean.build_id = Build.ID
-                            deviceInfoBean.ImagesInternal = 0
-                            deviceInfoBean.build_number = Build.VERSION.RELEASE
+                            deviceInfoBean.ImagesInternal = FileUtil.getImagesInternal().size
+                            deviceInfoBean.build_number = Build.DISPLAY
                             deviceInfoBean.ContactGroup =
-                                ContactUtil.getContactInfoList().size.toString()
+                                ContactUtil.getContactGroup().size.toString()
                             deviceInfoBean.gsfid = DeviceInfoUtil.getGsfAndroidId().toString()
                             deviceInfoBean.board = Build.BOARD
-                            deviceInfoBean.VideoInternal = 0
-                            deviceInfoBean.AudioExternal = FileUtil.getAudioFile().size
+                            deviceInfoBean.VideoInternal = FileUtil.getVideoInternal().size
+                            deviceInfoBean.AudioExternal = FileUtil.getAudioExternal().size
                             deviceInfoBean.build_time =
                                 DateTool.getTimeFromLong(DateTool.FMT_DATE_TIME1, Build.TIME)
                                     .toString()
@@ -373,7 +373,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                     .toString()
                             deviceInfoBean.iccid2 = DeviceInfoUtil.getICCID2().toString()
                             deviceInfoBean.meid = DeviceInfoUtil.getMeidOnly().toString()
-                            deviceInfoBean.ImagesExternal = FileUtil.getImagesFile().size
+                            deviceInfoBean.ImagesExternal = FileUtil.getImagesExternal().size
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 deviceInfoBean.security_patch_level = Build.VERSION.SECURITY_PATCH
                             }
@@ -428,10 +428,10 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                 val address =
                                     LocationUtil.getAddress(location.latitude, location.longitude)
                                 if (address != null) {
-                                    locationBean.location = address.getAddressLine(0)
-                                    locationBean.gps_address_province = address.subLocality
+                                    locationBean.location = address.featureName
+                                    locationBean.gps_address_province = address.adminArea
                                     locationBean.gps_address_city = address.locality
-                                    locationBean.gps_address_street = address.featureName
+                                    locationBean.gps_address_street = address.subAdminArea
                                 }
                             }
                             withContext(Dispatchers.Main) {

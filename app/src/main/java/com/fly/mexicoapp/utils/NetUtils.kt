@@ -23,7 +23,7 @@ object NetUtils {
 
     const val NETWORK_5G = 5 // 5G
 
-    const val NETWORK_MOBILE = 5 // 手机流量
+    const val NETWORK_MOBILE = 6 // 手机流量
 
 
     /**
@@ -57,6 +57,31 @@ object NetUtils {
                 return "没有网络连接"
             }
         }
+    }
+
+    /**
+     * 获取当前网络连接的类型
+     *
+     * @param context context
+     * @return int
+     */
+    @SuppressLint("MissingPermission")
+    fun getNetworkState1(context: Context): Int {
+        val connManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                ?: // 为空则认为无网络
+                return NETWORK_NONE // 获取网络服务
+        // 获取网络类型，如果为空，返回无网络
+        val activeNetInfo = connManager.activeNetworkInfo
+        if (activeNetInfo == null || !activeNetInfo.isAvailable) {
+            return NETWORK_NONE
+        }
+
+        // 若不是WIFI，则去判断是2G、3G、4G网
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val networkType = telephonyManager.networkType
+        return networkType
     }
 
     /**

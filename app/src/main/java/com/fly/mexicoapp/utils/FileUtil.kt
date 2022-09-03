@@ -16,65 +16,57 @@ import java.io.InputStream
 object FileUtil {
     fun getDownloadFile():ArrayList<File>{
         var fileList = ArrayList<File>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val allFiles = getFiles(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),MediaStore.Files.FileColumns.DATA)
-            allFiles?.let {
-                fileList.addAll(it)
-            }
-        }else{
-            val externalStoragePublicDirectory =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            externalStoragePublicDirectory?.let {
-                val tempList: Array<out File>? = externalStoragePublicDirectory.listFiles()
-                tempList?.let {
-                    getAllFiles(it,fileList)
-                }
-            }
+        val allFiles = getFiles(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),MediaStore.Files.FileColumns.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
         }
         return fileList
     }
 
-    fun getAudioFile():ArrayList<File>{
+    fun getAudioExternal():ArrayList<File>{
         var fileList = ArrayList<File>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val allFiles = getFiles(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA)
-            allFiles?.let {
-                fileList.addAll(it)
-            }
-        }else{
-            val externalStoragePublicDirectory =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-            externalStoragePublicDirectory?.let {
-                val tempList: Array<out File>? = externalStoragePublicDirectory.listFiles()
-                tempList?.let {
-                    getAllFiles(it,fileList)
-                }
-            }
+        val allFiles = getFiles(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
         }
         return fileList
     }
 
-    fun getImagesFile():ArrayList<File>{
+    fun getAudioInternal():ArrayList<File>{
         var fileList = ArrayList<File>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val allFiles = getFiles(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Images.Media.DATA)
-            allFiles?.let {
-                fileList.addAll(it)
-            }
-        }else{
-            val externalStoragePublicDirectory =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            externalStoragePublicDirectory?.let {
-                val tempList: Array<out File>? = externalStoragePublicDirectory.listFiles()
-                tempList?.let {
-                    getAllFiles(it,fileList)
-                }
-            }
+        val allFiles = getFiles(MediaStore.Audio.Media.INTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
         }
         return fileList
     }
 
+    fun getVideoInternal():ArrayList<File>{
+        var fileList = ArrayList<File>()
+        val allFiles = getFiles(MediaStore.Video.Media.INTERNAL_CONTENT_URI,MediaStore.Video.Media.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
+        }
+        return fileList
+    }
 
+    fun getImagesInternal():ArrayList<File>{
+        var fileList = ArrayList<File>()
+        val allFiles = getFiles(MediaStore.Images.Media.INTERNAL_CONTENT_URI,MediaStore.Images.Media.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
+        }
+        return fileList
+    }
+
+    fun getImagesExternal():ArrayList<File>{
+        var fileList = ArrayList<File>()
+        val allFiles = getFiles(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Images.Media.DATA)
+        allFiles?.let {
+            fileList.addAll(it)
+        }
+        return fileList
+    }
 
     /**
      * 获取指定目录内所有文件路径

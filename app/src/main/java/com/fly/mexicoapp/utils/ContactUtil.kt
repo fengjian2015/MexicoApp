@@ -30,4 +30,21 @@ object ContactUtil {
         }
         return contacts
     }
+
+    fun getContactGroup():ArrayList<String>{
+        var contactGroup  = ArrayList<String>()
+        try {
+            val groupCursor: Cursor = MyApplication.application.contentResolver.query(
+                ContactsContract.Groups.CONTENT_URI,
+                null, null, null, null
+            )!!
+            while (groupCursor.moveToNext()) {
+                contactGroup.add(groupCursor.getString(groupCursor.getColumnIndexOrThrow(ContactsContract.Groups.TITLE)))
+            }
+            groupCursor.close()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+        return contactGroup
+    }
 }
