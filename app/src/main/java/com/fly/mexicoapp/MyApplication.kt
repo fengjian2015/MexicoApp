@@ -21,12 +21,6 @@ class MyApplication : Application() {
         ActivityManager.registerActivityLifecycleCallbacks()
         LogUtils.setDebug(BuildConfig.DEBUG)
         HttpClient.instance.init(Cons.baseUrl)
-        //电池信息需要广播
-        BatteryUtil.registerReceiver()
-        //公网ip
-        GlobalScope.launch(Dispatchers.IO) {
-            PublicIP.requestIp()
-        }
         AppsFlyerUtil.initAppsFlyer()
     }
 }

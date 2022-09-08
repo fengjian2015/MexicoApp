@@ -1,5 +1,6 @@
 package com.fly.mexicoapp.utils
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.fly.mexicoapp.BatteryChangeReceiver
@@ -11,10 +12,14 @@ import com.google.gson.Gson
 
 object BatteryUtil {
 
-    fun registerReceiver(){
+    fun registerReceiver(context: Context,batteryChangeReceiver: BatteryChangeReceiver){
         var intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED)
-        MyApplication.application.registerReceiver(BatteryChangeReceiver(), intentFilter)
+        context.registerReceiver(batteryChangeReceiver, intentFilter)
+    }
+
+    fun unRegisterReceiver(context: Context,batteryChangeReceiver: BatteryChangeReceiver){
+        context.unregisterReceiver(batteryChangeReceiver)
     }
 
     fun getBatteryBean():BatteryBean{

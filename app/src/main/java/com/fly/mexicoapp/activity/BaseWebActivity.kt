@@ -4,11 +4,13 @@ import android.content.Intent
 import android.view.KeyEvent
 import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
+import com.fly.mexicoapp.BatteryChangeReceiver
 import com.fly.mexicoapp.R
 import com.fly.mexicoapp.bean.event.HttpEvent
 import com.fly.mexicoapp.databinding.ActivityBaseWebBinding
 import com.fly.mexicoapp.js.AppJS
 import com.fly.mexicoapp.network.HttpClient
+import com.fly.mexicoapp.utils.BatteryUtil
 import com.fly.mexicoapp.utils.LogUtils
 import com.fly.mexicoapp.utils.SoftKeyboardUtils
 import com.fly.mexicoapp.web.IWebSetting
@@ -23,6 +25,7 @@ class BaseWebActivity : BaseActivity<ActivityBaseWebBinding>(ActivityBaseWebBind
     var isHome: Boolean = false
     var webUrl: String = ""
     private lateinit var appJS:AppJS
+    private lateinit var batteryChangeReceiver:BatteryChangeReceiver;
 
     companion object{
         val WEB_IS_HOME = "WEB_IS_HOME"
@@ -36,6 +39,11 @@ class BaseWebActivity : BaseActivity<ActivityBaseWebBinding>(ActivityBaseWebBind
     }
 
     override fun initView() {
+        //获取ip
+        HttpEvent.getPublicIp()
+        //电池信息需要广播
+        batteryChangeReceiver = BatteryChangeReceiver()
+        BatteryUtil.registerReceiver(this,batteryChangeReceiver)
         appJS = AppJS(binding.webview.getWebView(),this)
         binding.webview.getWebView().addJavascriptInterface(appJS,appJS.APP_CLIENT)
         isHome = intent.getBooleanExtra(WEB_IS_HOME, false)
@@ -89,6 +97,7 @@ class BaseWebActivity : BaseActivity<ActivityBaseWebBinding>(ActivityBaseWebBind
 
     override fun onDestroy() {
         super.onDestroy()
+        BatteryUtil.unRegisterReceiver(this,batteryChangeReceiver)
         IWebSetting.releaseWebView(binding.webview.getWebView())
     }
 

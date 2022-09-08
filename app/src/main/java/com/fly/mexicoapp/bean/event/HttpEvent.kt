@@ -9,10 +9,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.fly.mexicoapp.MyApplication
 import com.fly.mexicoapp.bean.ApplyInfoBean
 import com.fly.mexicoapp.bean.UpdateBean
-import com.fly.mexicoapp.bean.response.ImageResponse
-import com.fly.mexicoapp.bean.response.ProtocolUrlBeanResponse
-import com.fly.mexicoapp.bean.response.UpdateBeanResponse
-import com.fly.mexicoapp.bean.response.UserInfoBeanResponse
+import com.fly.mexicoapp.bean.response.*
 import com.fly.mexicoapp.js.CallBackJS
 import com.fly.mexicoapp.js.bean.CommentParseDataBean
 import com.fly.mexicoapp.network.HttpClient
@@ -20,9 +17,6 @@ import com.fly.mexicoapp.network.NetworkScheduler
 import com.fly.mexicoapp.network.bean.BaseResponseBean
 import com.fly.mexicoapp.network.bean.HttpErrorBean
 import com.fly.mexicoapp.network.bean.HttpResponse
-import com.fly.mexicoapp.network.download.DownloadCallback
-import com.fly.mexicoapp.network.download.DownloadClient
-import com.fly.mexicoapp.network.download.DownloadListener
 import com.fly.mexicoapp.utils.*
 import com.fly.mexicoapp.utils.Cons.KEY_AF_CHANNEL
 import com.fly.mexicoapp.utils.Cons.KEY_PROTOCAL_1
@@ -164,6 +158,28 @@ object HttpEvent {
     }
 
     /**
+     * 验证码登录接口
+     */
+    fun getPublicIp(){
+        HttpClient.instance.httpService
+            .getPublicIp()
+            .compose(NetworkScheduler.compose())
+            .subscribe(object : HttpResponse<PublicIpResponse>() {
+                override fun businessSuccess(data: PublicIpResponse) {
+                    if (data.code == 200){
+                        data.data?.let {
+                            SPUtils.putString(Cons.KEY_PUBLIC_IP,it)
+                        }
+                    }
+                }
+
+                override fun businessFail(statusCode: Int, httpErrorBean: HttpErrorBean) {
+
+                }
+            })
+    }
+
+    /**
      * 检测更新
      */
     fun getNewVersion(){
@@ -269,44 +285,4 @@ object HttpEvent {
         })
     }
 
-    /**
-     * 更新
-     */
-    fun update(downloadUrl:String,file:File,downloadCallBack:DownloadCallback){
-        val downloadUtils = DownloadClient(downloadUrl, object : DownloadListener {
-            override fun onStartDownload(length: Long) {
-                LogUtils.d("----length:$length")
-            }
-
-            override fun onProgress(progress: Long, totalByte: Long) {
-                LogUtils.d("----progress:$progress")
-                downloadCallBack.onProgress(progress, totalByte)
-            }
-
-            override fun onFail(errorInfo: String?) {
-                LogUtils.d("----errorInfo:$errorInfo")
-            }
-
-        })
-        downloadUtils.download(downloadUrl, file, object : Observer<InputStream> {
-            override fun onSubscribe(d: Disposable) {
-                LogUtils.d("----onSubscribe:$d")
-            }
-
-
-            override fun onError(e: Throwable?) {
-                LogUtils.d("----onError:${e.toString()}")
-                downloadCallBack.onFail(e.toString())
-            }
-
-            override fun onComplete() {
-                downloadCallBack.onSuccess(file)
-                LogUtils.d("----onComplete:${file.length()}")
-            }
-
-            override fun onNext(t: InputStream) {
-                LogUtils.d("----onNext:$t")
-            }
-        })
-    }
 }

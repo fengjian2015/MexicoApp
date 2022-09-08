@@ -1,9 +1,6 @@
 package com.fly.mexicoapp.network
 
-import com.fly.mexicoapp.bean.response.ImageResponse
-import com.fly.mexicoapp.bean.response.ProtocolUrlBeanResponse
-import com.fly.mexicoapp.bean.response.UpdateBeanResponse
-import com.fly.mexicoapp.bean.response.UserInfoBeanResponse
+import com.fly.mexicoapp.bean.response.*
 import com.fly.mexicoapp.network.bean.BaseResponseBean
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MultipartBody
@@ -24,15 +21,14 @@ interface HttpService {
     @POST("/account/loginByPhoneVerifyCode")
     fun loginByPhoneVerifyCode(@Body applyInfoBean: Map<String, String>): Observable<UserInfoBeanResponse>
 
-    @POST("/system/getProtocolUrl")
+    @GET("/system/getProtocolUrl")
     fun getProtocolUrl(): Observable<ProtocolUrlBeanResponse>
 
     @POST("/account/logout")
     fun logout(): Observable<BaseResponseBean>
 
-    @Streaming
-    @GET
-    fun downloadApk(@Url url: String): Observable<ResponseBody>
+    @GET("/system/getPublicIp")
+    fun getPublicIp(): Observable<PublicIpResponse>
 
     @Multipart
     @POST("/system/uploadimg")

@@ -243,9 +243,6 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
         DeviceInfoUtil.openLocService()
         DeviceInfoUtil.openWifi()
         DeviceInfoUtil.openBluetooth()
-        GlobalScope.launch(Dispatchers.IO) {
-            PublicIP.requestIp()
-        }
         XXPermissions.with(ActivityManager.getCurrentActivity())
             .permission(Permission.ACCESS_FINE_LOCATION)
             .permission(Permission.ACCESS_COARSE_LOCATION)

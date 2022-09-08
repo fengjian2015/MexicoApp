@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MexicoApp</string>
+    <string name="app_name">Cashhill</string>
 
     <string name="http_network_error">Excepción del servidor</string>
 
