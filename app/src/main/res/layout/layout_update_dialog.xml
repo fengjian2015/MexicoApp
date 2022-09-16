@@ -9,42 +9,53 @@
     >
     <LinearLayout
         android:layout_width="290dp"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@mipmap/bg_update"
         android:paddingBottom="20dp"
         >
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New version available"
+            android:gravity="center"
+            android:layout_marginTop="180dp"
+            android:textColor="#ff0053ff"
+            android:textSize="18sp"
+            />
+        <TextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="140dp"
-            android:paddingHorizontal="45dp"
-            android:textColor="#2D2E39"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Please upgrade to the latest version."
+            android:textColor="#ff333333"
+            android:layout_marginTop="22dp"
             android:textSize="14sp"
-            tootls:text="1.三个发射点范德萨发生的方式啊\n2.的萨芬撒旦发射点1.三个发射点范德萨发生的方式啊\n2.的萨芬撒旦发射点1.三个发射点范德萨发生的方式啊\n2.的萨芬撒旦发射点1.三个发射点范德萨发生的方式啊\n2.的萨芬撒旦发射点"/>
-
+            />
         <Button
             android:id="@+id/buttonUpload"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginHorizontal="55dp"
-            android:text="@string/update_update_now"
+            android:layout_height="49dp"
+            android:layout_marginHorizontal="30dp"
+            android:text="Upgrade"
             android:textColor="#FFFFFF"
+            android:background="@drawable/shape_button_update_ok"
             android:textSize="17sp"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="40dp"
             />
 
         <Button
             android:id="@+id/buttonWait"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginHorizontal="55dp"
-            android:text="@string/update_update_ignorar"
-            android:textColor="#322D2D"
-            android:textSize="16sp"
+            android:layout_height="49dp"
+            android:layout_marginHorizontal="30dp"
+            android:text="Later"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/shape_button_update_fail"
+            android:textSize="17sp"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
             />
     </LinearLayout>
 

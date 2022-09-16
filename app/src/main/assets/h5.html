@@ -5,8 +5,8 @@
     <title>JS交互demo</title>
     <style type="text/css">
             button{
-                width:100px;
-                height: 60px;
+                width:300px;
+                height: 300px;
             }
         </style>
     <script>
@@ -104,11 +104,7 @@
             appAndroid.appJS(s);
          }
 
-      function invokeCalendersInfo(){
-            var s='{"id":"1574215326410","event":"eventCalendersInfo","data":{}}';
-             console.log('日历信息'+s);
-            appAndroid.appJS(s);
-         }
+
 
         function invokeTime(){
             var s='{"id":"1574215326410","event":"eventServiceTime","data":{"value":"1662004817000"}}';
@@ -133,7 +129,6 @@
 <button type="button" id="button9" onclick="invokeSmsInfo()">短信信息收集</button>
 <button type="button" id="button14" onclick="invokeTackPhoto()">拍照上传</button>
 <button type="button" id="button10" onclick="invokeAlbumInfo()">相册信息收集</button>
-<button type="button" id="button16" onclick="invokeCalendersInfo()">日历信息收集</button>
 <button type="button" id="button17" onclick="invokeTime()">获取服务器时间戳</button>
 </body>
 </html>

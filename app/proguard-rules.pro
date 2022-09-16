@@ -150,3 +150,29 @@
 -keep class io.reactivex.schedulers.Schedulers {
     public static ** test();
 }
+
+-keep class com.fly.cashhill.network.bean.HttpResponse { *; }
+
+#kotlin 相关
+-dontwarn kotlin.**
+-keep class kotlin.** { *; }
+-keep interface kotlin.** { *; }
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
+}
+-keepclasseswithmembers @kotlin.Metadata class * { *; }
+-keepclassmembers class **.WhenMappings {
+    <fields>;
+}
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+}
+
+-keep class kotlinx.** { *; }
+-keep interface kotlinx.** { *; }
+-dontwarn kotlinx.**
+-dontnote kotlinx.serialization.SerializationKt
+
+-keep class org.jetbrains.** { *; }
+-keep interface org.jetbrains.** { *; }
+-dontwarn org.jetbrains.*
