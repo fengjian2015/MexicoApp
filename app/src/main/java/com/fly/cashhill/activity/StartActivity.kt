@@ -28,7 +28,6 @@ class StartActivity : BaseActivity<ActivityStartBinding>(ActivityStartBinding::i
                 .permission(Permission.ACCESS_COARSE_LOCATION)
                 .permission(Permission.READ_PHONE_STATE)
                 .permission(Permission.CAMERA)
-                .permission(Permission.READ_CALL_LOG)
                 .request(object : OnPermissionCallback {
                     override fun onGranted(permissions: List<String>, all: Boolean) {
                         if (all && DeviceInfoUtil.isLocServiceEnable() && DeviceInfoUtil.isOpenWifi()) {
@@ -64,8 +63,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>(ActivityStartBinding::i
                 Permission.READ_CONTACTS,
                 Permission.GET_ACCOUNTS,
                 Permission.READ_EXTERNAL_STORAGE,
-                Permission.WRITE_EXTERNAL_STORAGE,
-                Permission.READ_CALL_LOG
+                Permission.WRITE_EXTERNAL_STORAGE
             )
         ){
             if (!DeviceInfoUtil.isLocServiceEnable() || !DeviceInfoUtil.isOpenWifi()) {

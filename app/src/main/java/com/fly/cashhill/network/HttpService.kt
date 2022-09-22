@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface HttpService {
-    @POST("/auth/uploadCocoLoanWardAuth")
+    @POST("/auth/uploadCreditModeLoanWardAuth")
     fun applyInfo(@Body applyInfoBean: Map<String, String>): Observable<BaseResponseBean>
 
     @POST("/system/getNewVersion")

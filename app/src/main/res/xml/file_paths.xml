@@ -2,14 +2,10 @@
 <PreferenceScreen >
 
     <path>
-
         <root-path
             name="root"
             path="" />
         <external-path
-            name="external_filespath"
-            path="." />
-        <external-files-path
             name="external_files"
             path="." />
         <cache-path

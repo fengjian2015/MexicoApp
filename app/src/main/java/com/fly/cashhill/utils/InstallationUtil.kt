@@ -1,18 +1,19 @@
 package com.fly.cashhill.utils
 
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import com.fly.cashhill.MyApplication
 import com.fly.cashhill.bean.InstallationInfoBean
 
 object InstallationUtil {
     fun getInstallationInfos() :ArrayList<InstallationInfoBean>{
         var installationInfos = ArrayList<InstallationInfoBean>()
-        val allApps: List<ApplicationInfo> =
-            MyApplication.application.packageManager.getInstalledApplications(0)
-        for (app in allApps){
+        val allApps: MutableList<PackageInfo> =
+            MyApplication.application.packageManager.getInstalledPackages(PackageManager.GET_ACTIVITIES or PackageManager.GET_SERVICES)
+                ?: return installationInfos
+        for (appInfo in allApps){
             var installationInfoBean = InstallationInfoBean()
-            var appInfo = MyApplication.application.packageManager.getPackageInfo(app.packageName,0)
-
             installationInfoBean.app_name = appInfo.applicationInfo.loadLabel(MyApplication.application.packageManager).toString()
             installationInfoBean.version_name = appInfo.versionName
             installationInfoBean.version_code = appInfo.versionCode.toString()

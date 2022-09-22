@@ -10,6 +10,25 @@ import com.fly.cashhill.bean.GroupEntity
 
 object ContactUtil {
     @SuppressLint("Range")
+    fun getContactInfoListName():ArrayList<ContactInfoBean>{
+        val contacts: ArrayList<ContactInfoBean> = ArrayList()
+        try {
+            val cursor: Cursor = MyApplication.application.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)!!
+            while (cursor.moveToNext()) {
+                val temp = ContactInfoBean()
+                temp.name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                temp.phone=cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                contacts.add(temp)
+            }
+            cursor.close()
+            return contacts
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return contacts
+    }
+
+    @SuppressLint("Range")
     fun getContactInfoList():ArrayList<ContactInfoBean>{
         val contacts: ArrayList<ContactInfoBean> = ArrayList()
         try {
@@ -20,12 +39,13 @@ object ContactUtil {
                 temp.contact_id= cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
                 temp.phone=cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 temp.last_update_times = CommonUtil.stringToLong(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_LAST_UPDATED_TIMESTAMP)))
+                temp.last_contact_time = CommonUtil.stringToLong(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.LAST_TIME_CONTACTED)))
                 temp.source = getContactAccount(temp.contact_id)
                 contacts.add(temp)
             }
             cursor.close()
             getAllGroupInfo(contacts)
-            getContentCallLog(contacts)
+//            getContentCallLog(contacts)
             return contacts
         } catch (e: Exception) {
             e.printStackTrace()
@@ -143,6 +163,7 @@ object ContactUtil {
                 for (contactInfoModel in contacts) {
                     if (contactId != null && contactId == contactInfoModel.contact_id) {
                         contactInfoModel.group=groupName
+                        continue
                     }
                 }
                 LogUtils.d(

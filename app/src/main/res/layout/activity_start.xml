@@ -20,6 +20,7 @@
         android:scrollbars="none"
         app:layout_constraintVertical_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include2">
         <LinearLayout
@@ -180,8 +181,8 @@
                 android:text="We require the media, photos, and files permission that allows the App to enable you to upload photos or documents to complete the application form when you apply for a loan."
                 android:textColor="#ff666666"
                 android:textSize="12sp"
-                android:paddingBottom="140dp"
                 />
+
         </LinearLayout>
     </ScrollView>
 
@@ -190,7 +191,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/shape_button_ok"
         android:text="Agree"
         android:textColor="#ffffffff"

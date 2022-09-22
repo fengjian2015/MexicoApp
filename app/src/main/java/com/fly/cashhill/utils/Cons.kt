@@ -3,7 +3,7 @@ package com.fly.cashhill.utils
 object Cons {
     @JvmStatic
     val baseUrl: String = "http://112.124.4.191:7004"
-    val APPS_FLYER_KEY = ""
+    val APPS_FLYER_KEY = "UdCiVWEuDa77NDd64FRAnW"
     var sendPhone:String = ""
 
     const val TACK_PHOTO = 1010
@@ -31,7 +31,7 @@ object Cons {
     val JS_KEY_USER_INFO="eventUserInfo"
     val JS_KEY_LOGOUT="eventSignOut"
     val JS_KEY_CONTACT_INFO="eventContactInfo"
-    val JS_KEY_DEVICE_INFO="evenDeviceInfo"
+    val JS_KEY_DEVICE_INFO="eventDeviceInfo"
     val JS_KEY_LOCATION_INFO="eventLocationInfo"
     val JS_KEY_INSTALLATION_INFO="eventInstallationInfo"
     val JS_KEY_SMS_INFO="eventSmsInfo"

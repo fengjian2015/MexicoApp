@@ -42,6 +42,7 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
     fun load(activity: FragmentActivity) {
         this.activity = activity
         val loaderManager: LoaderManager = LoaderManager.getInstance(activity)
+        LogUtils.d("isLoading "+isLoading + "isLoadFinish "+isLoadFinish)
         onImageLoadListener?.let {
             if (!isLoading && isLoadFinish) it.onImageLoad(albumInfos)
         }
@@ -133,9 +134,10 @@ class ImageDataSource : LoaderManager.LoaderCallbacks<Cursor> {
                     if (imageAddTime / 1000000000 > 100) imageAddTime else (imageAddTime * 1000)
                 ).toString()
                 albumInfos.add(albumInfo)
-                isLoading = false
-                isLoadFinish = true
+
             }
+            isLoading = false
+            isLoadFinish = true
             onImageLoadListener?.let { on ->
                 on.onImageLoad(albumInfos)
             }

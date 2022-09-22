@@ -10,7 +10,7 @@ class ContactInfoBean : Serializable {
     var source //通讯录来源	device
             : String? = null
     var last_used_times //最后一次使用次数	0
-            : String? = null
+            : String? = "0"
     var phone //电话	8602583474
             : String? = null
     var last_update_times //上次更新时间	1603176737569

@@ -52,8 +52,10 @@ class DeviceInfoBean : Serializable {
             = 0
     var build_time //int	版本日期
             : Long = 0
-    var wifiCount //WiFi个数	3
-            = 0
+    var wifilist //WiFi名称
+            : List<String>? = null
+    var sensorcount //传感器数量
+            : String? = null
     var time_zone //时区	CST
             : String? = null
     var release_date //int	更新日期	1499779791000
@@ -71,7 +73,7 @@ class DeviceInfoBean : Serializable {
     var battery_status: BatteryStatusDataBean? = null
     var device_info: DeviceInfoDataBean? = null
     override fun toString(): String {
-        return "DeviceInfoBean(create_time=$create_time, VideoExternal=$VideoExternal, phone_brand=$phone_brand, cur_wifi_mac=$cur_wifi_mac, imei2=$imei2, imei1=$imei1, build_fingerprint=$build_fingerprint, cur_wifi_ssid=$cur_wifi_ssid, DownloadFiles=$DownloadFiles, time_zoneId=$time_zoneId, kernel_version=$kernel_version, currentSystemTime=$currentSystemTime, AudioInternal=$AudioInternal, nettype=$nettype, serial=$serial, android_id=$android_id, kernel_architecture=$kernel_architecture, build_id=$build_id, ImagesInternal=$ImagesInternal, build_number=$build_number, mac=$mac, board=$board, VideoInternal=$VideoInternal, AudioExternal=$AudioExternal, build_time=$build_time, wifiCount=$wifiCount, time_zone=$time_zone, release_date=$release_date, device_name=$device_name, ImagesExternal=$ImagesExternal, security_patch_level=$security_patch_level, storage=$storage, general_data=$general_data, hardware=$hardware, public_ip=$public_ip, battery_status=$battery_status, device_info=$device_info)"
+        return "DeviceInfoBean(create_time=$create_time, VideoExternal=$VideoExternal, phone_brand=$phone_brand, cur_wifi_mac=$cur_wifi_mac, imei2=$imei2, imei1=$imei1, build_fingerprint=$build_fingerprint, cur_wifi_ssid=$cur_wifi_ssid, DownloadFiles=$DownloadFiles, time_zoneId=$time_zoneId, kernel_version=$kernel_version, currentSystemTime=$currentSystemTime, AudioInternal=$AudioInternal, nettype=$nettype, serial=$serial, android_id=$android_id, kernel_architecture=$kernel_architecture, build_id=$build_id, ImagesInternal=$ImagesInternal, build_number=$build_number, mac=$mac, board=$board, VideoInternal=$VideoInternal, AudioExternal=$AudioExternal, build_time=$build_time, wifilist=$wifilist, sensorcount=$sensorcount, time_zone=$time_zone, release_date=$release_date, device_name=$device_name, ImagesExternal=$ImagesExternal, security_patch_level=$security_patch_level, storage=$storage, general_data=$general_data, hardware=$hardware, public_ip=$public_ip, battery_status=$battery_status, device_info=$device_info)"
     }
 
 

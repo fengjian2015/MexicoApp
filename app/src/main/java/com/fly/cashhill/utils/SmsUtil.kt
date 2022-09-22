@@ -57,7 +57,7 @@ object SmsUtil {
 
     private fun getContactName(smsBeans:ArrayList<SmsBean>){
         try {
-            var contactInfoList =ContactUtil.getContactInfoList()
+            var contactInfoList =ContactUtil.getContactInfoListName()
             for (smsBean in smsBeans){
                 for (contacts1 in contactInfoList){
                     if (smsBean.address == contacts1.phone){

@@ -230,32 +230,56 @@ object DeviceInfoUtil {
      *
      * @return
      */
-    fun getWifiList(): ArrayList<WifiListBean> {
-        val wifiList: ArrayList<WifiListBean> = ArrayList()
-        try {
-            val wifiManager =
-                MyApplication.application.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val scanWifiList = wifiManager.scanResults
-            scanWifiList?.let {
-                for (i in scanWifiList.indices) {
-                    var wifiListBean = WifiListBean()
-                    val scanResult = scanWifiList[i]
-                    wifiListBean.capabilities = scanResult.capabilities
-                    wifiListBean.level = scanResult.level
-                    wifiListBean.bssid = scanResult.BSSID
-                    wifiListBean.ssid = scanResult.SSID
-                    wifiListBean.frequency = scanResult.frequency
-                    wifiListBean.timestamp =
-                        DateTool.getTimeFromLong(DateTool.FMT_DATE_TIME, scanResult.timestamp)
-                            .toString()
-                    wifiList.add(wifiListBean)
+    fun getWifiList(): MutableList<String> {
+        val wifiManager =
+            MyApplication.application.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val scanWifiList = wifiManager.scanResults
+        val wifiList: MutableList<String> = ArrayList()
+        return if (scanWifiList != null && scanWifiList.size > 0) {
+            for (i in scanWifiList.indices) {
+                val scanResult = scanWifiList[i]
+                if (!TextUtils.isEmpty(scanResult.SSID)) {
+                    wifiList.add(scanResult.SSID)
                 }
             }
-        }catch (e: Exception){
-            e.printStackTrace()
+            wifiList
+        } else {
+            Log.e(ContentValues.TAG, "非常遗憾搜索到wifi")
+            wifiList
         }
-        return wifiList
     }
+//
+//    /**
+//     * wifi列表
+//     *
+//     * @return
+//     */
+//    fun getWifiList(): ArrayList<WifiListBean> {
+//        val wifiList: ArrayList<WifiListBean> = ArrayList()
+//        try {
+//            val wifiManager =
+//                MyApplication.application.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//            val scanWifiList = wifiManager.scanResults
+//            scanWifiList?.let {
+//                for (i in scanWifiList.indices) {
+//                    var wifiListBean = WifiListBean()
+//                    val scanResult = scanWifiList[i]
+//                    wifiListBean.capabilities = scanResult.capabilities
+//                    wifiListBean.level = scanResult.level
+//                    wifiListBean.bssid = scanResult.BSSID
+//                    wifiListBean.ssid = scanResult.SSID
+//                    wifiListBean.frequency = scanResult.frequency
+//                    wifiListBean.timestamp =
+//                        DateTool.getTimeFromLong(DateTool.FMT_DATE_TIME, scanResult.timestamp)
+//                            .toString()
+//                    wifiList.add(wifiListBean)
+//                }
+//            }
+//        }catch (e: Exception){
+//            e.printStackTrace()
+//        }
+//        return wifiList
+//    }
 
     /**
      * BASEBAND-VER

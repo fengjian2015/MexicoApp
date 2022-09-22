@@ -30,7 +30,7 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     abstract fun initView()
 
-    private fun initBar() {
+    open fun initBar() {
         immersionBar = ImmersionBar
             .with(this)
             .fitsSystemWindows(true)

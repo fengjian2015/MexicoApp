@@ -10,10 +10,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 object CallBackJS {
-    val SUCCESS: String = "200"
-    val ERROR_NET: String = "201"
-    val EROOR_PERMISSIONS: String = "202"
-    val EROOR_OTHER: String = "203"
+    val SUCCESS: String = "0"
+    val ERROR_NET: String = "1"
+    val EROOR_PERMISSIONS: String = "2"
+    val EROOR_OTHER: String = "999"
 
 
     fun callBackJsSuccess(webView: WebView, id: String, event: String) {
