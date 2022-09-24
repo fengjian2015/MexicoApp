@@ -2,7 +2,9 @@ package com.fly.cashhill.utils
 
 object Cons {
     @JvmStatic
-    val baseUrl: String = "http://112.124.4.191:7004"
+//    val baseUrl: String = "http://112.124.4.191:7004"
+    //正式环境
+    val baseUrl: String = "https://api.cashhillss.com"
     val APPS_FLYER_KEY = "UdCiVWEuDa77NDd64FRAnW"
     var sendPhone:String = ""
 

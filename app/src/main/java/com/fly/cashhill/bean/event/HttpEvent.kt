@@ -85,9 +85,9 @@ object HttpEvent {
                 override fun businessSuccess(data: UserInfoBeanResponse) {
                     if (data.code == 200){
                         data.data?.let {
+
                             if (it.isNew){
-                                // TODO:  埋点信息
-                                AppsFlyerUtil.postAF("")
+                                AppsFlyerUtil.postAF("hilogin")
                             }
                             UserInfoManger.saveUserInfo(it)
                             BaseWebActivity.openWebView(activity,it.homeUrl,true)

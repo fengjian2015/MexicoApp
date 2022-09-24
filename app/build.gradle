@@ -10,8 +10,8 @@ android {
         applicationId "com.fly.cashhill"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,8 +67,6 @@ dependencies {
     api 'com.google.android.gms:play-services-base:15.0.1'
     api 'com.google.android.gms:play-services-ads:15.0.1'
     implementation "com.android.installreferrer:installreferrer:2.2"
-    
-    implementation 'com.flurry.android:analytics:13.1.0'
     // Retrofit
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'

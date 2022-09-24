@@ -46,7 +46,7 @@ class BaseWebActivity : BaseActivity<ActivityBaseWebBinding>(ActivityBaseWebBind
         webUrl = intent.getStringExtra(WEB_URL).toString()
 //        测试
 //        webUrl = "file:///android_asset/h5.html";
-        webUrl = "http://112.124.4.191:9001/app_test1/#/home";
+//        webUrl = "http://112.124.4.191:9001/app_test1/#/home";
         if (!webUrl.startsWith("http") && !webUrl.startsWith("file")){
             webUrl = "https://$webUrl"
         }
