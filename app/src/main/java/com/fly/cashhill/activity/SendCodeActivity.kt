@@ -125,7 +125,7 @@ class SendCodeActivity : BaseActivity<ActivitySendCodeBinding>(ActivitySendCodeB
     }
 
     private fun httpLogin(){
-        HttpEvent.loginByPhoneVerifyCode(Cons.sendPhone,binding.etCode.text.toString(),this)
+        HttpEvent.loginByPhoneVerifyCode(Cons.sendPhone,binding.etCode.text.toString(),this,binding.etCode)
     }
 
     private fun httpSendCode(){

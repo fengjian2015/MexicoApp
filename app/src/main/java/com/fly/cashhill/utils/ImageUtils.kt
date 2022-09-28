@@ -1,20 +1,25 @@
 package com.fly.cashhill.utils
 
+import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
+import com.fly.cashhill.MyApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
 object ImageUtils {
 
-    private const val IMG_WIDTH = 480 //超過此寬、高則會 resize圖片
+    private const val IMG_WIDTH = 380 //超過此寬、高則會 resize圖片
 
-    private const val IMG_HIGHT = 800
+    private const val IMG_HIGHT = 600
     private const val COMPRESS_QUALITY = 70 //壓縮 JPEG使用的品質(70代表壓縮率為 30%)
 
 
@@ -56,7 +61,7 @@ object ImageUtils {
             }
         }
         options.inJustDecodeBounds = false
-        options.inSampleSize = inSampleSize
+        options.inSampleSize = if (inSampleSize == 1){ 2 } else{ inSampleSize }
 
         //取出原檔的 Bitmap(若寬高超過會 resize)並設定原始的旋轉角度
         val srcBitmap = BitmapFactory.decodeFile(srcImgPath, options)
@@ -75,7 +80,7 @@ object ImageUtils {
             tempImgDir.mkdirs()
         }
         val compressedImgName =
-            SystemClock.currentThreadTimeMillis().toString() + getFileNameFromPath(srcImgPath)
+            System.currentTimeMillis().toString() + getFileNameFromPath(srcImgPath)
         val compressedImgFile = File(tempImgDir, compressedImgName)
         var fos: FileOutputStream? = null
         try {

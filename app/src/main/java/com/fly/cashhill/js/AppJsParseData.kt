@@ -42,6 +42,8 @@ import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.*
+import top.zibin.luban.Luban
+import top.zibin.luban.OnCompressListener
 import java.io.File
 import java.util.*
 
@@ -614,28 +616,56 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
         if (requestCode == Cons.TACK_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 //自拍信息
-                LoadingUtil.showLoading()
-                GlobalScope.launch(Dispatchers.IO) {
-                    var file: File? = null
-                    photoFile?.let {
-                        LogUtils.d("压缩前：" + it.length())
-                        try {
-                            file = ImageUtils.compressImage(it.absolutePath)
-                        }catch (e:Exception){
-                            e.printStackTrace()
-                            file = photoFile
+                photoFile?.let {
+                    LogUtils.d("压缩前：" + it.length())
+                    Luban.with(ActivityManager.getCurrentActivity())
+                        .load(it)
+                        .ignoreBy(100)
+                        .setTargetDir(CommonUtil.getImageDir())
+                        .filter { path ->
+                            !(TextUtils.isEmpty(path) || path.lowercase(Locale.getDefault()).endsWith(".gif"))
                         }
-                        LogUtils.d("压缩后：" + (file?.length() ?: "0"))
-                    }
-                    withContext(Dispatchers.Main) {
-                        if (file == null) {
-                            CallBackJS.callbackJsErrorOther(mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO, "La carga de la imagen falló.")
-                        }
-                        file?.let {
-                            HttpEvent.uploadImage(it,eventTackPhotoType, mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO)
-                        }
-                    }
+                        .setCompressListener(object : OnCompressListener {
+                            override fun onStart() {
+
+                            }
+
+                            override fun onSuccess(file: File?) {
+                                if (file != null){
+                                    HttpEvent.uploadImage(file,eventTackPhotoType, mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO)
+                                    LogUtils.d("压缩后：" + (file?.length() ?: "0"))
+                                }else{
+                                    CallBackJS.callbackJsErrorOther(mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO, "Ninguno.")
+                                }
+                            }
+
+                            override fun onError(e: Throwable?) {
+                                CallBackJS.callbackJsErrorOther(mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO, e.toString())
+                            }
+                        }).launch()
                 }
+//                GlobalScope.launch(Dispatchers.IO) {
+//                    var file: File? = null
+//                    photoFile?.let {
+//                        LogUtils.d("压缩前：" + it.length())
+//                        try {
+//                            file = ImageUtils.compressImage(it.absolutePath)
+//                        }catch (e:Exception){
+//                            e.printStackTrace()
+//                            file = photoFile
+//                        }
+//                        LogUtils.d("压缩后：" + (file?.length() ?: "0"))
+//                    }
+//                    withContext(Dispatchers.Main) {
+//                        if (file == null) {
+//                            CallBackJS.callbackJsErrorOther(mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO, "La carga de la imagen falló.")
+//                            return@withContext
+//                        }
+//                        file?.let {
+//                            HttpEvent.uploadImage(it,eventTackPhotoType, mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO)
+//                        }
+//                    }
+//                }
             } else {
                 CallBackJS.callbackJsErrorOther(mWebView, eventTackPhotoId, JS_KEY_TACK_PHOTO, "Ninguno.")
             }

@@ -34,8 +34,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             ptvTxt.length,
             Color.parseColor("#0BBC79"),
             View.OnClickListener {
-                if (SPUtils.getString(Cons.KEY_PROTOCAL_2) == null)return@OnClickListener
-                BaseWebActivity.openWebView(this,SPUtils.getString(Cons.KEY_PROTOCAL_2),false)
+                if (SPUtils.getString(Cons.KEY_PROTOCAL_6) == null)return@OnClickListener
+                BaseWebActivity.openWebView(this,SPUtils.getString(Cons.KEY_PROTOCAL_6),false)
             })
         binding.tvp.text = spannableString
         binding.tvp.movementMethod = LinkMovementMethod.getInstance()

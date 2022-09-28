@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Handler
 import android.util.Base64
 import android.webkit.WebView
+import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import com.appsflyer.AppsFlyerLib
 import com.fly.cashhill.MyApplication
@@ -67,7 +68,12 @@ object HttpEvent {
     /**
      * 验证码登录接口
      */
-    fun loginByPhoneVerifyCode(phone:String,code :String,activity: SendCodeActivity){
+    fun loginByPhoneVerifyCode(
+        phone: String,
+        code: String,
+        activity: SendCodeActivity,
+        etCode: EditText
+    ){
         val map: MutableMap<String, String> = HashMap()
         map["Phone"] = phone
         map["Code"] = code
@@ -98,11 +104,13 @@ object HttpEvent {
                         }
 
                     }else{
+                        etCode.setText("")
                         ToastUtils.showShort(data.message)
                     }
                 }
 
                 override fun businessFail(statusCode: Int, httpErrorBean: HttpErrorBean) {
+                    etCode.setText("")
                     ToastUtils.showShort(httpErrorBean.message)
                 }
             })
