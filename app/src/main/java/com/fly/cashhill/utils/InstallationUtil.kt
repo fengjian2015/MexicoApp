@@ -21,9 +21,9 @@ object InstallationUtil {
             installationInfoBean.first_install_time = appInfo.firstInstallTime
             installationInfoBean.last_update_time = appInfo.lastUpdateTime
             installationInfoBean.is_system = if ((appInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0){
-                "2"
-            }else{
                 "1"
+            }else{
+                "2"
             }
             installationInfos.add(installationInfoBean)
         }

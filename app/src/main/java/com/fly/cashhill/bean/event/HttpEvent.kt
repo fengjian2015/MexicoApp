@@ -30,16 +30,17 @@ import com.fly.cashhill.utils.Cons.KEY_PROTOCAL_6
 import com.fly.cashhill.utils.Cons.KEY_PROTOCAL_7
 import com.fly.cashhill.weight.UpdateDialog
 import com.google.gson.Gson
-import io.reactivex.rxjava3.core.Observer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
+import kotlinx.coroutines.launch
+import okhttp3.*
+import okio.Buffer
 import retrofit2.Response
 import java.io.File
-import kotlin.collections.HashMap
+import java.io.IOException
+import java.nio.charset.Charset
+import java.nio.charset.UnsupportedCharsetException
+
 
 object HttpEvent {
 
@@ -251,53 +252,136 @@ object HttpEvent {
     }
 
     /**
-     * 上传图片
-     * 文件类型1-用户自拍头像面部照片 2-curp身份证正面照 3-curp身份证反面照片 4-活体认证照片
+     * Okhttp上传图片(流)
      */
-    fun uploadImage(file: File,type:String,mWebView: WebView,id:String ,event:String){
-        LoadingUtil.showLoading()
-        val imageBody: RequestBody =
-            RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val imageBodyPart = MultipartBody.Part.createFormData("file", file.name, imageBody)
-        val txtBodyPart = MultipartBody.Part.createFormData("suffix", "jpg")
-        val type = MultipartBody.Part.createFormData("type", type)
-        val oldPath = MultipartBody.Part.createFormData("oldPath", "")
-        val repos: Call<ImageResponse> =
-            HttpClient
-                .instance
-                .httpService
-                .uploadImg(txtBodyPart,type,oldPath, imageBodyPart)
-        repos.enqueue(object : Callback<ImageResponse> {
-            override fun onResponse(
-                call: Call<ImageResponse>,
-                response: Response<ImageResponse>) {
-                LoadingUtil.dismissProgress()
-                try {
-                    if (response.body()!!.code === 200) { //请求成功
+    public fun uploadImage(file: File,type:String,mWebView: WebView,id:String ,event:String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            LoadingUtil.showLoading()
+        }
+        GlobalScope.launch(Dispatchers.IO){
+            // 创建 OkHttpClient
+            val client = HttpClient.instance.initOkHttpClient(false)
+            // 要上传的文件
+            val mediaType = MediaType.parse("image/jpeg")
+            // 把文件封装进请求体
+            val fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            // MultipartBody 上传文件专用的请求体
+            val body: RequestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM) // 表单类型(必填)
+                .addFormDataPart("file", file.name, fileBody)
+                .addFormDataPart("suffix", "jpg")
+                .addFormDataPart("type", type)
+                .addFormDataPart("oldPath", "")
+                .build()
+            val request: Request = Request.Builder()
+                .url(Cons.baseUrl + "/system/uploadimg")
+                .post(body)
+                .build()
+            val call: okhttp3.Call = client.newCall(request)
+            call.enqueue(object : okhttp3.Callback {
+
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    LoadingUtil.dismissProgress()
+                    CallBackJS.callbackJsErrorOther(mWebView,id,event,e.toString())
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    LoadingUtil.dismissProgress()
+                    if (response.isSuccessful) {
                         //返回数据处理
-                        LogUtils.d("----上传图片成功：$response")
-                        var commontParseDataBean = CommentParseDataBean()
-                        commontParseDataBean.value = response.body()!!.data
-                        CallBackJS.callBackJsSuccess(mWebView,id,event,Gson().toJson(commontParseDataBean))
+                        try {
+                            var imageResponse = Gson().fromJson(getResponseBody(response),ImageResponse::class.java)
+                            LogUtils.d("----上传图片成功：${imageResponse}")
+                            var commontParseDataBean = CommentParseDataBean()
+                            commontParseDataBean.value = imageResponse.data
+                            CallBackJS.callBackJsSuccess(mWebView,id,event,Gson().toJson(commontParseDataBean))
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
+
                     } else {
                         //图片上传失败
                         LogUtils.d("----上传图片失败：$response")
                         CallBackJS.callbackJsErrorOther(mWebView,id,event,response.message())
                     }
-                } catch (e: Exception) {
-                    //返回数据异常
-                    CallBackJS.callbackJsErrorOther(mWebView,id,event,e.toString())
-                    LogUtils.d("----上传图片异常：$e")
                 }
-            }
 
-            override fun onFailure(call: Call<ImageResponse>, t: Throwable) {
-                LoadingUtil.dismissProgress()
-                //请求异常
-                LogUtils.d("----上传图片异常：$t")
-                CallBackJS.callbackJsErrorOther(mWebView,id,event,t.toString())
-            }
-        })
+            })
+        }
     }
+
+    fun getResponseBody(response: okhttp3.Response): String? {
+        val UTF8: Charset = Charset.forName("UTF-8")
+        val responseBody: ResponseBody? = response.body() as ResponseBody?
+        val source = responseBody!!.source()
+        try {
+            source.request(Long.MAX_VALUE) // Buffer the entire body.
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        val buffer: Buffer = source.buffer()
+        var charset: Charset = UTF8
+        val contentType = responseBody.contentType()
+        if (contentType != null) {
+            try {
+                charset = contentType.charset(UTF8)!!
+            } catch (e: UnsupportedCharsetException) {
+                e.printStackTrace()
+            }
+        }
+        return buffer.clone().readString(charset)
+    }
+
+//    /**
+//     * 上传图片
+//     * 文件类型1-用户自拍头像面部照片 2-curp身份证正面照 3-curp身份证反面照片 4-活体认证照片
+//     */
+//    fun uploadImage(file: File,type:String,mWebView: WebView,id:String ,event:String){
+//        LoadingUtil.showLoading()
+//        GlobalScope.launch(Dispatchers.IO){
+//            val imageBody: RequestBody =
+//                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+//            val imageBodyPart = MultipartBody.Part.createFormData("file", file.name, imageBody)
+//            val txtBodyPart = MultipartBody.Part.createFormData("suffix", "jpg")
+//            val type = MultipartBody.Part.createFormData("type", type)
+//            val oldPath = MultipartBody.Part.createFormData("oldPath", "")
+//            val repos: Call<ImageResponse> =
+//                HttpClient
+//                    .instance
+//                    .httpService
+//                    .uploadImg(txtBodyPart,type,oldPath, imageBodyPart)
+//            repos.enqueue(object : Callback<ImageResponse> {
+//                override fun onResponse(
+//                    call: Call<ImageResponse>,
+//                    response: Response<ImageResponse>) {
+//                    LoadingUtil.dismissProgress()
+//                    try {
+//                        if (response.body()!!.code === 200) { //请求成功
+//                            //返回数据处理
+//                            LogUtils.d("----上传图片成功：$response")
+//                            var commontParseDataBean = CommentParseDataBean()
+//                            commontParseDataBean.value = response.body()!!.data
+//                            CallBackJS.callBackJsSuccess(mWebView,id,event,Gson().toJson(commontParseDataBean))
+//                        } else {
+//                            //图片上传失败
+//                            LogUtils.d("----上传图片失败：$response")
+//                            CallBackJS.callbackJsErrorOther(mWebView,id,event,response.message())
+//                        }
+//                    } catch (e: Exception) {
+//                        //返回数据异常
+//                        CallBackJS.callbackJsErrorOther(mWebView,id,event,e.toString())
+//                        LogUtils.d("----上传图片异常：$e")
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<ImageResponse>, t: Throwable) {
+//                    LoadingUtil.dismissProgress()
+//                    //请求异常
+//                    LogUtils.d("----上传图片异常：$t")
+//                    CallBackJS.callbackJsErrorOther(mWebView,id,event,t.toString())
+//                }
+//            })
+//        }
+//    }
 
 }

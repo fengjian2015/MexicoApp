@@ -55,7 +55,7 @@ class HttpClient private constructor() {
     /**
      * 初始化okHttpClient
      */
-    private fun initOkHttpClient(isAuth :Boolean):OkHttpClient {
+    public fun initOkHttpClient(isAuth :Boolean):OkHttpClient {
         val builder1 = OkHttpClient.Builder()
         builder1
             .retryOnConnectionFailure(false)

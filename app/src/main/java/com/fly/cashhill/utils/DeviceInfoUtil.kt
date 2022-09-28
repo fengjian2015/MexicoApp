@@ -793,12 +793,7 @@ object DeviceInfoUtil {
                         if (version >= Build.VERSION_CODES.O) { //8.0
                             val getFsUuid = obj.javaClass.getDeclaredMethod("getFsUuid")
                             val fsUuid = getFsUuid.invoke(obj)
-                            fsUuid?.let {
-                                totalSize = getTotalSize(
-                                    MyApplication.application,
-                                    fsUuid.toString()
-                                ) //8.0 以后使用
-                            }
+                            totalSize = getTotalSize(MyApplication.application, fsUuid as String?) //8.0 以后使用
                         } else if (version >= Build.VERSION_CODES.N_MR1) { //7.1.1
                             val getPrimaryStorageSize =
                                 StorageManager::class.java.getMethod("getPrimaryStorageSize") //5.0 6.0 7.0没有

@@ -57,9 +57,10 @@ object LoadingUtil {
     @Synchronized
     private fun initLoading(context: Context) {
         if (progressDialog == null) {
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(context,R.style.LoadingDialogStyle)
                 .setView(R.layout.layout_loading)
             builder.setCancelable(true)
+            progressDialog = builder.create()
         }
     }
 }

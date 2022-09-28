@@ -269,9 +269,9 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             deviceInfoBean.AudioExternal = FileUtil.getAudioExternal().size
 
                             val storageData = StorageDataBean()
-                            storageData.availableMemory = DeviceInfoUtil.getAvailableSpace()
+                            storageData.availableMemory = DeviceInfoUtil.getAvailMemory().toString()
                             storageData.elapsedRealtime=SystemClock.elapsedRealtime()
-                            storageData.memorySize = CommonUtil.stringToLong(DeviceInfoUtil.getTotalRam())
+                            storageData.memorySize = DeviceInfoUtil.getTotalMemory()
                             storageData.isUsingProxyPort=if (DeviceInfoUtil.isWifiProxy()) {
                                 "true"
                             } else {
@@ -282,17 +282,14 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             } else {
                                 "false"
                             }
-                            storageData.ram_total_size=storageData.memorySize
+                            storageData.ram_total_size=DeviceInfoUtil.getTotalMemory()
                             storageData.isUSBDebug = if (DeviceInfoUtil.checkUsbStatus()) {
                                 "true"
                             } else {
                                 "false"
                             }
-                            storageData.availableDiskSize =storageData.availableMemory
-                            storageData.totalDiskSize=
-                                (storageData.memorySize - CommonUtil.stringToLong(
-                                    storageData.availableMemory!!
-                                )).toString() + ""
+                            storageData.availableDiskSize =DeviceInfoUtil.getAvailableSpace()
+                            storageData.totalDiskSize=DeviceInfoUtil.getTotalRam()
                             deviceInfoBean.storage = storageData
 
                             val generalData = GeneralDataBean()
@@ -644,6 +641,8 @@ class AppJsParseData constructor(webView: WebView, viewModelStoreOwner: ViewMode
                             }
                         }).launch()
                 }
+
+
 //                GlobalScope.launch(Dispatchers.IO) {
 //                    var file: File? = null
 //                    photoFile?.let {

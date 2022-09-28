@@ -32,15 +32,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="In order to perform credit risk assessment, the following data permissions is required with your permission:\n\nUser Personal Information\nOur app collects user account data which includes email address and user public profile information like name, gender, photo, national ID or voter ID. This information is required as a part of registration process to access our service and it's also used to auto-populate relevant fields in the course of the interface of our app.\nOur app also collects mobile number for verification to check the active SIM status on the device, uniquely identify you and prevent frauds and unauthorized access.\nOur app collects and monitors specific information about your device including your hardware model, build model, RAM, storage; unique device identifiers like IMEI,serial number,SSAID; SIM information includes network operator, roaming state,WIFI information includes MAC address and mobile network information to uniquely identify the devices and ensure that no unauthorized device act on your behalf to prevent frauds. This also helps us in assessing credit worthiness for credit profile enrichment.\nAll above data will be uploaded to https://api.cashhillss.com.  We will delete the all these data after we have determined your risk profile."
-                android:textColor="#ff0bbc79"
+                android:text="Hi,\nIn order to perform credit risk assessment, the following data permissions is required with your permission:\n\nUser Personal Information\nOur app collects user account data which includes email address and user public profile information like name, gender, photo, national ID or voter ID.\nAll below data will be uploaded to https://api.cashhillss.com.  We will delete the all these data after we have determined your risk profile.\n"
+                android:textColor="#0BBC79"
                 android:textSize="12sp"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SMS"
-                android:textColor="#ff333333"
+                android:textColor="#333333"
                 android:textSize="12sp"
                 android:layout_marginVertical="5dp"
                 android:drawableLeft="@mipmap/ic_p_1"
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="We collect all your SMS data, but we only monitor your messages related to financial transactions. To be specific, we will monitor the name of the sender, the description and the amount of the transaction to perform the credit risk assessment. This allows a faster disbursement of the loan.No personal SMS data is monitored,read,stored or shared."
-                android:textColor="#ff666666"
+                android:textColor="#0BBC79"
                 android:textSize="12sp"
                 />
 
@@ -68,27 +68,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="We collect all of your phone book contacts, including your phone contact name, phone number, contact added date, in order to increase your credit profile and enable you to quickly screen and select your references on your loan application. We will not share your contacts information under any circumstances, nor will we share it with third parties."
-                android:textColor="#ff666666"
+                android:textColor="#0BBC79"
                 android:textSize="12sp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Installed Applications"
-                android:textColor="#ff333333"
-                android:textSize="12sp"
-                android:layout_marginVertical="5dp"
-                android:drawableLeft="@mipmap/ic_p_3"
-                android:drawablePadding="5dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="We collect each installed applications' metadata information which includes the application name, package name, installed time, updated time, version name and version code of each installed application on your device to assess your credit worthiness and provide you with preapproved customized loan offers."
-                android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,7 +90,40 @@
                 android:textColor="#ff666666"
                 android:textSize="12sp"
                 />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Installed Applications"
+                android:textColor="#ff333333"
+                android:textSize="12sp"
+                android:layout_marginVertical="5dp"
+                android:drawableLeft="@mipmap/ic_p_3"
+                android:drawablePadding="5dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We collect each installed applications' metadata information which includes the application name, package name, installed time, updated time, version name and version code of each installed application on your device to assess your credit worthiness and provide you with preapproved customized loan offers."
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEDIA&amp;PHOTOS&amp;FILES"
+                android:textColor="#ff333333"
+                android:textSize="12sp"
+                android:layout_marginVertical="5dp"
+                android:drawableLeft="@mipmap/ic_p_5"
+                android:drawablePadding="5dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We require the media, photos, and files permission that allows the App to enable you to upload photos or documents to complete the application form when you apply for a loan."
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,25 +139,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="We require camera access so that you can easily scan, or capture required KYC documents and save time by allowing us to auto-fill relevant data. This ensures that you are provided with a seamless experience while using the application."
-                android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LINK TO THIRD-PARTY SDK"
-                android:textColor="#ff333333"
-                android:textSize="12sp"
-                android:layout_marginVertical="5dp"
-                android:drawableLeft="@mipmap/ic_p_6"
-                android:drawablePadding="5dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Our application has a link to a registered third party SDK which collects data on our behalf. Through SDK, SMS data, contacts installed application list, camera, location, phone status and storage data will be collected and transmitted to the third-party SDK for risk assessment. These data are stored to a secured server to perform a credit risk assessment. We ensure that our third-party service provider takes extensive security measures in order to protect your personal information against loss, misuse or alteration of the data."
                 android:textColor="#ff666666"
                 android:textSize="12sp"
                 />
@@ -168,20 +165,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MEDIA&amp;PHOTOS&amp;FILES"
+                android:text="LINK TO THIRD-PARTY SDK"
                 android:textColor="#ff333333"
                 android:textSize="12sp"
                 android:layout_marginVertical="5dp"
-                android:drawableLeft="@mipmap/ic_p_5"
+                android:drawableLeft="@mipmap/ic_p_6"
                 android:drawablePadding="5dp"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="We require the media, photos, and files permission that allows the App to enable you to upload photos or documents to complete the application form when you apply for a loan."
+                android:text="Our application has a link to a registered third party SDK which collects data on our behalf. Through SDK, SMS data, contacts installed application list, camera, location, phone status and storage data will be collected and transmitted to the third-party SDK for risk assessment. These data are stored to a secured server to perform a credit risk assessment. We ensure that our third-party service provider takes extensive security measures in order to protect your personal information against loss, misuse or alteration of the data."
                 android:textColor="#ff666666"
                 android:textSize="12sp"
                 />
+
+
 
         </LinearLayout>
     </ScrollView>
