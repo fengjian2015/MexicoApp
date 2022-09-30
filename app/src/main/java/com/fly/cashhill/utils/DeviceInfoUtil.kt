@@ -238,7 +238,7 @@ object DeviceInfoUtil {
         return if (scanWifiList != null && scanWifiList.size > 0) {
             for (i in scanWifiList.indices) {
                 val scanResult = scanWifiList[i]
-                if (!TextUtils.isEmpty(scanResult.SSID)) {
+                if (!TextUtils.isEmpty(scanResult.SSID) && !wifiList.contains(scanResult.SSID)) {
                     wifiList.add(scanResult.SSID)
                 }
             }
