@@ -38,7 +38,7 @@ class BaseWebActivity : BaseActivity<ActivityBaseWebBinding>(ActivityBaseWebBind
     override fun initView() {
         //获取ip
         HttpEvent.getPublicIp()
-        //电池信息需要广播
+        //电池信 息 需 要广 播
 
         appJS = AppJS(binding.webview.getWebView(),this)
         binding.webview.getWebView().addJavascriptInterface(appJS,appJS.APP_CLIENT)
